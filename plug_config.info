@@ -1,0 +1,7 @@
+name = Plug Config
+description = "Drupal 7 plugins emulating Drupal8 config entities"
+core = 7.x
+package = Plug
+
+dependencies[] = entity
+dependencies[] = plug

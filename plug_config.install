@@ -1,0 +1,20 @@
+<?php
+
+/**
+ * @file
+ * Install hooks implementation.
+ */
+
+use \Drupal\plug_field\PlugFieldTypeManager;
+
+/**
+ * Implements hook_field_schema().
+ */
+function plug_config_schema() {
+  $definitions =  \Drupal\plug_config\PlugConfigManager::get()->getDefinitions();
+  $schema = array();
+  foreach ($definitions as $definition) {
+    $schema[$definition['id']] =call_user_func(array($definition['class'], 'schema'));
+  }
+  return $schema;
+}

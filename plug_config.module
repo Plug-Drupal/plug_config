@@ -1,0 +1,37 @@
+<?php
+
+/**
+ * @file
+ * Module implementation file.
+ */
+
+/**
+ * Implements hook_modules_installed()
+ */
+function plug_config_modules_installed($modules) {
+  cache_clear_all('module_namespaces', 'cache');
+  cache_clear_all('module_directories', 'cache');
+  \Drupal\plug_config\PlugConfigManager::get()->clearCachedDefinitions();
+  $definitions = \Drupal\plug_config\PlugConfigManager::get()->getDefinitions();
+  foreach ($modules as $module) {
+    array_walk($definitions, function($definition, $key) use ($module){
+      if ($definition['provider'] = $module && !db_table_exists($key)) {
+        db_create_table($key, call_user_func(array($definition['class'], 'schema')));
+      }
+    });
+  }
+}
+
+/**
+ * Implements hook_modules_uninstalled().
+ */
+function plug_config_modules_uninstalled($modules) {
+  // TODO: Remove config entities tables.
+}
+
+/**
+ * Implements hook_entity_info().
+ */
+function plug_config_entity_info() {
+  return \Drupal\plug_config\PlugConfigManager::get()->getDefinitions();
+}
