@@ -86,7 +86,6 @@ class PlugConfigManager extends DefaultPluginManager {
         'base table' => $definition['id'],
         'module' => $definition['provider'],
         'entity class' => $definition['class'],
-        'uri callback' => array($definition['class'], 'uriCallback'),
         'access callback' => array($definition['class'], 'accessCallback'),
         'exportable' => TRUE,
       );

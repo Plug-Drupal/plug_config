@@ -5,17 +5,19 @@
  * Contains class \Drupal\twisters_contract\Entity\Contract\ContractTypeController.
  */
 
-namespace Drupal\plug_config_example\Plugin\Config;
+namespace Drupal\plug_config\Plugin\Config;
 
-class ConfigExampleController extends \EntityAPIControllerExportable {
+use EntityAPIControllerExportable;
+
+class DefaultConfigController extends \EntityAPIControllerExportable {
 
   /**
    * {@inheritdoc}
    */
   public function create(array $values = array()) {
     $values += array(
-      'label' => '',
-      'description' => '',
+      'name' => '',
+      'machine_name' => '',
     );
     return parent::create($values);
   }

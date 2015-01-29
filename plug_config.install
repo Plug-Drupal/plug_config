@@ -8,7 +8,7 @@
 use \Drupal\plug_field\PlugFieldTypeManager;
 
 /**
- * Implements hook_field_schema().
+ * Implements hook_schema().
  */
 function plug_config_schema() {
   $definitions =  \Drupal\plug_config\PlugConfigManager::get()->getDefinitions();
