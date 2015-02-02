@@ -16,8 +16,8 @@ class DefaultConfigController extends \EntityAPIControllerExportable {
    */
   public function create(array $values = array()) {
     $values += array(
+      'label' => '',
       'name' => '',
-      'machine_name' => '',
     );
     return parent::create($values);
   }

@@ -64,30 +64,36 @@ class PlugConfigManager extends DefaultPluginManager {
    *   List of definitions to store in cache.
    */
   protected function findDefinitions() {
-    // Convert "field_types" key to "field types", given that annotations don't
-    // allow spaces and add default settings.
-    return array_map(function($definition) {
+    $defaults = array(
+      'exportable' => TRUE,
+      'controller class' => '\Drupal\plug_config\Plugin\Config\DefaultConfigController',
+      'controller ui class' => '\Drupal\plug_config\Plugin\Config\DefaultConfigUIController',
+      'entity keys' => array(
+        'id' => 'id',
+        'label' => 'label',
+        'name' => 'name',
+      ),
+    );
+    return array_map(function($definition) use ($defaults) {
       foreach ($definition as $property_name => &$item) {
         if (($new_property = preg_replace('/_/', ' ', $property_name)) && $new_property != $property_name) {
           $definition[$new_property] = $definition[$property_name];
           unset($definition[$property_name]);
         }
-        if (is_array($item)) {
-          foreach ($item as $item_id => $nested_item) {
-            if (($new_property = preg_replace('/_/', ' ', $item_id)) && $new_property != $item_id) {
-              $item[$new_property] = $item[$item_id];
-              unset($item[$item_id]);
-            }
-          }
-        }
       }
+
+      $definition += $defaults;
       return $definition + array(
-        'controller class' => 'EntityAPIControllerExportable',
         'base table' => $definition['id'],
         'module' => $definition['provider'],
         'entity class' => $definition['class'],
         'access callback' => array($definition['class'], 'accessCallback'),
-        'exportable' => TRUE,
+        'admin ui' => array(
+          'controller class' => $definition['controller ui class'],
+          'path' => $definition['path'],
+          'file' => 'plug_config.module',
+          'file path' => drupal_get_path('module', 'plug_config')
+        ),
       );
     }, parent::findDefinitions());
   }
