@@ -68,7 +68,7 @@ function plug_config_entity_info() {
  *   See entity_metadata_form_entity_ui().
  *
  * @return mixed
- * The fully built and processed form, ready to be rendered.
+ *   The fully built and processed form, ready to be rendered.
  *
  * @throws EntityMalformedException
  *
