@@ -5,16 +5,16 @@
  * Install hooks implementation.
  */
 
-use \Drupal\plug_field\PlugFieldTypeManager;
+use Drupal\plug_config\PlugConfigManager;
 
 /**
  * Implements hook_schema().
  */
 function plug_config_schema() {
-  $definitions =  \Drupal\plug_config\PlugConfigManager::get()->getDefinitions();
+  $definitions =  PlugConfigManager::get()->getDefinitions();
   $schema = array();
   foreach ($definitions as $definition) {
-    $schema[$definition['id']] =call_user_func(array($definition['class'], 'schema'));
+    $schema[$definition['id']] = call_user_func(array($definition['class'], 'schema'));
   }
   return $schema;
 }

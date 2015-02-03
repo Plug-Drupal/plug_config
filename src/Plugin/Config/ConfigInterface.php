@@ -19,16 +19,16 @@ interface ConfigInterface {
   public static function schema();
 
   /**
-   * Checks if the access to the entity.
+   * Checks if there is access to the entity.
    *
    * @param string $op
-   *   The op to perform on the entity.
+   *   The operation to perform on the entity.
    * @param string $entity_type
-   *   The entity type of the entity accessing to.
-   * @param \stdClass|null $entity
-   *   The entity checking access to. Default to NULL.
-   * @param \stdClass|null $account
-   *   The user account. Default to NULL.
+   *   The type of the entity being accessed.
+   * @param object $entity
+   *   The entity checking access to. Defaults to NULL.
+   * @param object $account
+   *   The user account. Defaults to NULL.
    *
    * @return bool
    *   Boolean indicating if $account is granted to perform $op.
@@ -42,7 +42,7 @@ interface ConfigInterface {
    *   The basic form array.
    * @param array $form_state
    *   The form state array.
-   * @param \Drupal\plug_config\Plugin\Config\ConfigInterface $config_entity
+   * @param DefaultConfigEntityInterface $config_entity
    *   The entity is being added/edited on this form.
    * @param string $op
    *   The operation to perform on the entity. Can be 'edit', 'add' or 'clone'.
@@ -50,7 +50,7 @@ interface ConfigInterface {
    * @return array
    *   Form structure to define a new entity.
    */
-  public static function form($form, &$form_state, ConfigInterface $config_entity, $op = 'edit');
+  public static function form(array $form, array &$form_state, DefaultConfigEntityInterface $config_entity, $op = 'edit');
 
   /**
    * Submit callback for the entity form.
@@ -60,6 +60,6 @@ interface ConfigInterface {
    * @param array $form_state
    *   The form state array.
    */
-  public static function formSubmit($form, &$form_state);
+  public static function formSubmit(array $form, array &$form_state);
 
 }

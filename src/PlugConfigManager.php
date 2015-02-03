@@ -33,7 +33,7 @@ class PlugConfigManager extends DefaultPluginManager {
    * @param string $bin
    *   The cache bin for the plugin manager.
    *
-   * @return \Drupal\Component\Plugin\PluginManagerInterface
+   * @return PlugConfigManager
    *   The created manager.
    */
   public static function create($bin = 'cache') {
@@ -46,7 +46,7 @@ class PlugConfigManager extends DefaultPluginManager {
    * @param string $bin
    *   The cache bin for the plugin manager.
    *
-   * @return \Drupal\Component\Plugin\PluginManagerInterface
+   * @return PlugConfigManager
    *   The created manager.
    */
   public static function get($bin = 'cache') {
