@@ -5,7 +5,7 @@
  * Module implementation file.
  */
 
-use Drupal\plug_config\PlugConfigManager;
+use Drupal\plug_config\Plugin\PlugConfigManager;
 
 /**
  * Implements hook_menu().
