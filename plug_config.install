@@ -5,7 +5,7 @@
  * Install hooks implementation.
  */
 
-use Drupal\plug_config\Plugin\PlugConfigManager;
+use Drupal\plug_config\PlugConfigManager;
 
 /**
  * Implements hook_schema().

@@ -5,7 +5,7 @@
  * Contains \Drupal\plug_field\PlugFieldManager.
  */
 
-namespace Drupal\plug_config\Plugin;
+namespace Drupal\plug_config;
 
 use Drupal\Core\Plugin\DefaultPluginManager;
 use Drupal\plug\Util\Module;
@@ -25,6 +25,36 @@ class PlugConfigManager extends DefaultPluginManager {
     parent::__construct('Plugin/Config', $namespaces, 'Drupal\plug_config\Plugin\Config\ConfigInterface', '\Drupal\plug_config\Annotation\Config');
     $this->setCacheBackend($cache_backend, 'config_plugins');
     $this->alterInfo('config_plugin');
+  }
+
+  /**
+   * PlugConfigManagerBase factory method.
+   *
+   * @param string $bin
+   *   The cache bin for the plugin manager.
+   *
+   * @return PlugConfigManager
+   *   The created manager.
+   */
+  public static function create($bin = 'cache') {
+    return new static(Module::getNamespaces(), _cache_get_object($bin));
+  }
+
+  /**
+   * PlugConfigManagerBase pseudo service.
+   *
+   * @param string $bin
+   *   The cache bin for the plugin manager.
+   *
+   * @return PlugConfigManager
+   *   The created manager.
+   */
+  public static function get($bin = 'cache') {
+    $manager = &drupal_static(get_called_class() . __FUNCTION__);
+    if (!isset($manager)) {
+      $manager = static::create($bin);
+    }
+    return $manager;
   }
 
   /**
