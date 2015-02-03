@@ -2,8 +2,7 @@
 
 namespace Drupal\plug_config_example\Plugin\Config;
 
-
-use Drupal\plug_config\Plugin\Config\ConfigInterface;
+use Drupal\plug_config\Plugin\Config\DefaultConfigEntityInterface;
 use Drupal\plug_config\Plugin\Config\DefaultConfigEntity;
 
 /**
@@ -39,7 +38,7 @@ class ConfigDay extends DefaultConfigEntity {
   /**
    * {@inheritdoc}
    */
-  public static function form($form, &$form_state, ConfigInterface $config_entity, $op = 'edit') {
+  public static function form(array $form, array &$form_state, DefaultConfigEntityInterface $config_entity, $op = 'edit') {
     $form = parent::form($form, $form_state, $config_entity, $op);
 
     $form['day'] = array(
