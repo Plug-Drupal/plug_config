@@ -5,7 +5,7 @@
  * Module implementation file.
  */
 
-use Drupal\plug_config\PlugConfigManager;
+use Drupal\plug_config\Plugin\PlugConfigManager;
 /**
  * Implements hook_modules_installed()
  */
@@ -13,7 +13,7 @@ function plug_config_modules_installed($modules) {
   cache_clear_all('module_namespaces', 'cache');
   cache_clear_all('module_directories', 'cache');
   PlugConfigManager::get()->clearCachedDefinitions();
-  cache_clear_all('Drupal\plug_config\PlugConfigManagerget', 'cache');
+  cache_clear_all('Drupal\plug_config\Plugin\PlugConfigManager::get', 'cache');
   $definitions = PlugConfigManager::create()->getDefinitions();
   foreach ($modules as $module) {
     array_walk($definitions, function($definition, $key) use ($module){

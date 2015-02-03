@@ -5,7 +5,7 @@
  * Contains \Drupal\plug_field\PlugFieldManager.
  */
 
-namespace Drupal\plug_config;
+namespace Drupal\plug_config\Plugin;
 
 use Drupal\Core\Plugin\DefaultPluginManager;
 use Drupal\plug\Util\Module;
