@@ -151,7 +151,6 @@ class DefaultConfigEntity extends Entity implements DefaultConfigEntityInterface
         '#value' => t('Delete @type', array('@type' => $entity_info['label'])),
         '#weight' => 45,
         '#limit_validation_errors' => array(),
-        '#submit' => array('config_example_form_submit_delete'),
       );
     }
     return $form;
@@ -164,6 +163,11 @@ class DefaultConfigEntity extends Entity implements DefaultConfigEntityInterface
     /** @var DefaultConfigEntityInterface $config_example */
     $config_example = entity_ui_form_submit_build_entity($form, $form_state);
     $entity_info = $config_example->entityInfo();
+
+    if ($form_state['triggering_element']['#id'] == 'edit-delete') {
+      $form_state['redirect'] = $entity_info['admin ui']['path'] .'/manage/' . $config_example->getName() . '/delete';
+      return;
+    }
 
     // Save and go back.
     $config_example->save();

@@ -50,7 +50,7 @@ class PlugConfigManager extends DefaultPluginManager {
    *   The created manager.
    */
   public static function get($bin = 'cache') {
-    $manager = &drupal_static(get_called_class() . __FUNCTION__);
+    $manager = &drupal_static(get_called_class() . '::get');
     if (!isset($manager)) {
       $manager = static::create($bin);
     }
