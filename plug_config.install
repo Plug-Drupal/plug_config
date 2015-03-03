@@ -11,9 +11,9 @@ use Drupal\plug_config\Plugin\PlugConfigManager;
  * Implements hook_schema().
  */
 function plug_config_schema() {
-  // Since the module is disabled, running this during uninstall will make the
-  //autoloader to fail discovery. Load the class manually.
-  module_load_include('php', 'plug_config', 'src/Plugin/PlugConfigManager');
+  if (!module_exists('plug_config')) {
+    return NULL;
+  }
   $definitions =  PlugConfigManager::get()->getDefinitions();
   $schema = array();
   foreach ($definitions as $definition) {
