@@ -11,6 +11,9 @@ use Drupal\plug_config\Plugin\PlugConfigManager;
  * Implements hook_schema().
  */
 function plug_config_schema() {
+  if (!module_exists('plug_config')) {
+    return NULL;
+  }
   $definitions =  PlugConfigManager::get()->getDefinitions();
   $schema = array();
   foreach ($definitions as $definition) {
