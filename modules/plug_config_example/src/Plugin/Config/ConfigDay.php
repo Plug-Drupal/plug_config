@@ -18,18 +18,23 @@ use Drupal\plug_config\Plugin\Config\DefaultConfigEntity;
 class ConfigDay extends DefaultConfigEntity {
 
   /**
+   * The day of the week.
+   *
+   * @var string
+   */
+  public $day;
+
+  /**
    * {@inheritdoc}
    */
   public static function schema() {
     $schema = parent::schema();
 
-    $schema['fields'] += array(
-      'day' => array(
-        'description' => 'The day of the week for a item.',
-        'type' => 'varchar',
-        'length' => 3,
-        'not null' => TRUE,
-      ),
+    $schema['fields']['day'] = array(
+      'description' => 'The day of the week for a item.',
+      'type' => 'varchar',
+      'length' => 3,
+      'not null' => TRUE,
     );
 
     return $schema;
@@ -38,8 +43,8 @@ class ConfigDay extends DefaultConfigEntity {
   /**
    * {@inheritdoc}
    */
-  public static function form(array $form, array &$form_state, DefaultConfigEntityInterface $config_entity, $op = 'edit') {
-    $form = parent::form($form, $form_state, $config_entity, $op);
+  public function form(array $form, array &$form_state, $op = 'edit') {
+    $form = parent::form($form, $form_state, $op);
 
     $form['day'] = array(
       '#type' => 'select',
@@ -53,7 +58,7 @@ class ConfigDay extends DefaultConfigEntity {
         'FRI' => t('Friday'),
         'SAT' => t('Saturday'),
       ),
-      '#default_value' => isset($config_entity->day) ? $config_entity->day : 'MON',
+      '#default_value' => isset($this->day) ? $this->day : 'MON',
     );
 
     return $form;

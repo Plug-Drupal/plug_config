@@ -7,7 +7,6 @@
 
 namespace Drupal\plug_config\Plugin\Config;
 
-
 interface ConfigInterface {
 
   /**
@@ -42,15 +41,13 @@ interface ConfigInterface {
    *   The basic form array.
    * @param array $form_state
    *   The form state array.
-   * @param DefaultConfigEntityInterface $config_entity
-   *   The entity is being added/edited on this form.
    * @param string $op
    *   The operation to perform on the entity. Can be 'edit', 'add' or 'clone'.
    *
    * @return array
    *   Form structure to define a new entity.
    */
-  public static function form(array $form, array &$form_state, DefaultConfigEntityInterface $config_entity, $op = 'edit');
+  public function form(array $form, array &$form_state, $op = 'edit');
 
   /**
    * Submit callback for the entity form.
@@ -60,6 +57,6 @@ interface ConfigInterface {
    * @param array $form_state
    *   The form state array.
    */
-  public static function formSubmit(array $form, array &$form_state);
+  public function formSubmit(array $form, array &$form_state);
 
 }

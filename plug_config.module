@@ -131,11 +131,11 @@ function plug_config_get_form($entity_type, $entity, $op = 'edit', $form_state =
 
 function plug_config_entity_form($form, &$form_state, $config_entity, $op = 'edit') {
   /** @var \Drupal\plug_config\Plugin\Config\DefaultConfigEntityInterface $config_entity */
-  return $config_entity->form($form, $form_state, $config_entity, $op);
+  return $config_entity->form($form, $form_state, $op);
 }
 
 function plug_config_entity_form_submit($form, &$form_state) {
-  /** @var \Drupal\plug_config\Plugin\Config\DefaultConfigEntityInterface $entity */
-  $entity = $form_state[$form_state['entity_type']];
-  $entity->formSubmit($form, $form_state);
+  /** @var \Drupal\plug_config\Plugin\Config\DefaultConfigEntityInterface $config_entity */
+  $config_entity = $form_state[$form_state['entity_type']];
+  $config_entity->formSubmit($form, $form_state);
 }
