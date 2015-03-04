@@ -50,17 +50,17 @@ class PlugConfigExampleBasicTest extends DrupalWebTestCase {
     $edit['name'] = 'monday';
     $this->drupalPost(NULL, $edit, 'Save Config day');
     $this->assertText('Config day Monday created');
-    $this->assertText('Monday (Machine name: monday)');
+    $this->assertText('Monday  (Machine name: monday)');
     $this->clickLink('edit');
 
     $edit['label'] = 'New Monday';
     $this->drupalPost(NULL, $edit, 'Save Config day');
-    $this->assertText('Config day New Monday created');
-    $this->assertText('New Monday (Machine name: monday)');
+    $this->assertText('Config day New Monday updated');
+    $this->assertText('New Monday  (Machine name: monday)');
     $this->clickLink('clone');
     $edit = array(
       'label' => 'Tuesday',
-      'name' => 'mon',
+      'name' => 'monday',
       'day' => 'TUE',
     );
     $this->drupalPost(NULL, $edit, 'Save Config day');
@@ -68,11 +68,11 @@ class PlugConfigExampleBasicTest extends DrupalWebTestCase {
     $edit['name'] = 'tuesday';
     $this->drupalPost(NULL, $edit, 'Save Config day');
     $this->assertText('Config day Tuesday created');
-    $this->assertText('Tuesday (Machine name: tuesday)');
-    $this->clickLink('edit');
+    $this->assertText('Tuesday  (Machine name: tuesday)');
+    $this->clickLink('edit', 1);
     $this->assertFieldByName('label', 'Tuesday');
     $this->assertFieldByName('name', 'tuesday');
-    $this->assertFieldByName('name', 'TUE');
+    $this->assertFieldByName('day', 'TUE');
     $this->drupalPost(NULL, array(), 'Delete Config day');
     $this->assertText('Are you sure you want to delete the Config day Tuesday?');
     $this->drupalPost(NULL, array(), 'Confirm');
