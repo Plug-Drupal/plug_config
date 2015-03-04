@@ -21,9 +21,11 @@ class PlugConfigManager extends DefaultPluginManager {
    * @param \DrupalCacheInterface $cache_backend
    *   Cache backend instance to use.
    */
-  public function __construct(\Traversable $namespaces, \DrupalCacheInterface $cache_backend) {
+  public function __construct(\Traversable $namespaces, $cache_backend = NULL) {
     parent::__construct('Plugin/Config', $namespaces, 'Drupal\plug_config\Plugin\Config\ConfigInterface', '\Drupal\plug_config\Annotation\Config');
-    $this->setCacheBackend($cache_backend, 'config_plugins');
+    if ($cache_backend instanceof \DrupalCacheInterface) {
+      $this->setCacheBackend($cache_backend, 'config_plugins');
+    }
     $this->alterInfo('config_plugin');
   }
 
@@ -32,12 +34,34 @@ class PlugConfigManager extends DefaultPluginManager {
    *
    * @param string $bin
    *   The cache bin for the plugin manager.
+   * @param bool $all
+   *   Include values for disabled modules.
    *
    * @return PlugConfigManager
    *   The created manager.
    */
-  public static function create($bin = 'cache') {
-    return new static(Module::getNamespaces(), _cache_get_object($bin));
+  public static function create($bin = 'cache', $all = FALSE) {
+    if ($all) {
+      return new static(Module::getNamespaces($all));
+    }
+    return new static(Module::getNamespaces($all), _cache_get_object($bin));
+  }
+
+  /**
+   * Create an uncached plugin manager that only considers the passed modules.
+   *
+   * @param array $modules
+   *   The list of modules to consider for plugins.
+   *
+   * @return PlugConfigManager
+   *   The created manager.
+   */
+  public static function scopedFactory(array $modules) {
+    $namespaces = new \ArrayObject();
+    foreach ($modules as $module) {
+      $namespaces['Drupal\\' . $module] = drupal_get_path('module', $module) . '/src';
+    }
+    return new static($namespaces);
   }
 
   /**
@@ -95,7 +119,36 @@ class PlugConfigManager extends DefaultPluginManager {
           'file path' => drupal_get_path('module', 'plug_config')
         ),
       );
-    }, parent::findDefinitions());
+    }, $this->findAllDefinitions());
+  }
+
+  /**
+   * Finds plugin definitions.
+   *
+   * This is a copy of parent::findDefinitions but it won't unset plugins for
+   * disabled modules.
+   *
+   * @return array
+   *   List of definitions to store in cache.
+   */
+  protected function findAllDefinitions() {
+    $definitions = $this->discovery->getDefinitions();
+    foreach ($definitions as $plugin_id => &$definition) {
+      $this->processDefinition($definition, $plugin_id);
+    }
+    if ($this->alterHook) {
+      drupal_alter($this->alterHook, $definitions);
+    }
+    // If this plugin was provided by a module that does not exist, remove the
+    // plugin definition.
+    foreach ($definitions as $plugin_id => $plugin_definition) {
+      // If the plugin definition is an object, attempt to convert it to an
+      // array, if that is not possible, skip further processing.
+      if (is_object($plugin_definition) && !($plugin_definition = (array) $plugin_definition)) {
+        continue;
+      }
+    }
+    return $definitions;
   }
 
 }

@@ -11,15 +11,11 @@ use Drupal\plug_config\Plugin\PlugConfigManager;
  * Implements hook_modules_installed()
  */
 function plug_config_modules_installed($modules) {
-  plug_config_clear_manager_cache();
-  $definitions = PlugConfigManager::create()->getDefinitions();
+  $definitions = PlugConfigManager::scopedFactory($modules)->getDefinitions();
   foreach ($modules as $module) {
     array_walk($definitions, function($definition, $key) use ($module){
-      if ($definition['provider'] = $module && !db_table_exists($key)) {
+      if ($definition['provider'] == $module && !db_table_exists($key)) {
         db_create_table($key, call_user_func(array($definition['class'], 'schema')));
-        $plug_config_schema = variable_get('plug_config_schema', array());
-        $plug_config_schema[$module][] = $key;
-        variable_set('plug_config_schema', $plug_config_schema);
       }
     });
   }
@@ -30,18 +26,14 @@ function plug_config_modules_installed($modules) {
  * Implements hook_modules_uninstalled().
  */
 function plug_config_modules_uninstalled($modules) {
-  $plug_config_schema = variable_get('plug_config_schema', array());
+  $definitions = PlugConfigManager::scopedFactory($modules)->getDefinitions();
   foreach ($modules as $module) {
-    if (isset($plug_config_schema[$module])) {
-      array_walk($plug_config_schema[$module], function($table) {
-        if (db_table_exists($table)) {
-          db_drop_table($table);
-        }
-      });
-      unset($plug_config_schema[$module]);
-    }
+    array_walk($definitions, function ($definition, $key) use ($module) {
+      if ($definition['provider'] == $module && db_table_exists($key)) {
+        db_drop_table($key);
+      }
+    });
   }
-  variable_set('plug_config_schema', $plug_config_schema);
 }
 
 /**
@@ -49,16 +41,6 @@ function plug_config_modules_uninstalled($modules) {
  */
 function plug_config_entity_info() {
   return PlugConfigManager::get()->getDefinitions();
-}
-
-/**
- * Helper function to remove all the Plug Config related caches.
- */
-function plug_config_clear_manager_cache() {
-  cache_clear_all('module_namespaces', 'cache');
-  cache_clear_all('module_directories', 'cache');
-  PlugConfigManager::get()->clearCachedDefinitions();
-  cache_clear_all('Drupal\plug_config\Plugin\PlugConfigManager::get', 'cache');
 }
 
 /**
