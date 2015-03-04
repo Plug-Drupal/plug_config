@@ -48,6 +48,23 @@ class PlugConfigManager extends DefaultPluginManager {
   }
 
   /**
+   * Create an uncached plugin manager that only considers the passed modules.
+   *
+   * @param array $modules
+   *   The list of modules to consider for plugins.
+   *
+   * @return PlugConfigManager
+   *   The created manager.
+   */
+  public static function scopedFactory(array $modules) {
+    $namespaces = new \ArrayObject();
+    foreach ($modules as $module) {
+      $namespaces['Drupal\\' . $module] = drupal_get_path('module', $module) . '/src';
+    }
+    return new static($namespaces);
+  }
+
+  /**
    * PlugConfigManagerBase pseudo service.
    *
    * @param string $bin
