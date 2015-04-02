@@ -77,7 +77,6 @@ class PlugConfigExampleBasicTest extends DrupalWebTestCase {
     $this->assertText('Are you sure you want to delete the Config day Tuesday?');
     $this->drupalPost(NULL, array(), 'Confirm');
     $this->assertText('Deleted Config day Tuesday.');
-
   }
 
 }
